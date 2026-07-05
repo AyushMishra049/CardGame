@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="p1.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="main">
+        <div class="name" draggable="true">
+            1
+        </div>
+        <div class="name" draggable="true">
+            2
+        </div>
+        <div class="name" draggable="true">
+            3
+        </div>
+        <div class="name" draggable="true">
+            4
+        </div>
+        <div class="name" draggable="true">
+            5
+        </div>
+        <div class="name" draggable="true">
+            6
+        </div>
+        <div class="name" draggable="true">
+            7
+        </div>
+        <div class="name" draggable="true">
+            8
+        </div>
+        <div class="name" draggable="true">
+            9
+        </div>
+        <div class="name" draggable="true">
+            10
+        </div>
+        <div class="name" draggable="true">
+            11
+        </div>
+        <div class="name" draggable="true">
+            12
+        </div>
+        <div class="name" draggable="true">
+            13
+        </div>
+        <div class="name" draggable="true">
+            14
+        </div>
+        <div class="name" draggable="true">
+            15
+        </div>
+        <div class="name" draggable="true">
+            16
+        </div>
+        <div class="name" draggable="true">
+            17
+        </div>
+        <div class="name" draggable="true">
+            18
+        </div>
+        <div class="name" draggable="true">
+            19
+        </div>
+        <div class="name" draggable="true">
+            20
+        </div>
+        <div class="name" draggable="true">
+            21
+        </div>
+        <div class="name" draggable="true">
+            22
+        </div>
+        <div class="name" draggable="true">
+            23
+        </div>
+        <div class="name" draggable="true">
+            24
+        </div>
+
+
+
+
+
+
+    </div>
+    <div class="b1">
+        <button onclick="shuffleCards()" class="shuffle-btn">
+            Shuffle Cards
+        </button>
+    </div>
+    <script>
+    const boxes = document.querySelectorAll(".name");
+    const container = document.querySelector(".main");
+
+    let draggedBox = null;
+
+    // -------------------- Shuffle Cards --------------------
+    function shuffleCards() {
+        const cards = Array.from(container.children);
+
+        for (let i = cards.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [cards[i], cards[j]] = [cards[j], cards[i]];
+        }
+
+        cards.forEach(card => container.appendChild(card));
+    }
+
+    // Shuffle automatically when page loads
+    shuffleCards();
+
+    // -------------------- Drag & Drop --------------------
+    boxes.forEach(box => {
+
+        box.addEventListener("dragstart", () => {
+            draggedBox = box;
+            box.classList.add("dragging");
+            setTimeout(() => {
+                box.style.opacity = "0.5";
+            }, 0);
+        });
+
+        box.addEventListener("dragend", () => {
+            box.classList.remove("dragging");
+            box.style.opacity = "1";
+        });
+
+    });
+
+    container.addEventListener("dragover", (e) => {
+        e.preventDefault();
+
+        const afterElement = getDragAfterElement(container, e.clientX, e.clientY);
+
+        if (afterElement == null) {
+            container.appendChild(draggedBox);
+        } else {
+            container.insertBefore(draggedBox, afterElement);
+        }
+    });
+
+    function getDragAfterElement(container, x, y) {
+
+        const elements = [...container.querySelectorAll(".name:not(.dragging)")];
+
+        return elements.reduce((closest, child) => {
+
+            const box = child.getBoundingClientRect();
+
+            const offset = y - box.top - box.height / 2;
+
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+    </script>    
+ 
+
+    
+  
+
+
+    
+    
+</body>
+</html>
